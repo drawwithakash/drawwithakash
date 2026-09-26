@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DRAW WITH AKASH | 30 Days Drawing Challenge</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+:root{
+    --bg:#f7f1e5;
+    --card:#fffdf7;
+    --text:#222;
+    --muted:#666;
+    --accent:#111;
+    --border:#ddd;
+    --success:#18864b;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:var(--bg) url("paper-bg.jpg") center/cover fixed;
+    color:var(--text);
+    min-height:100vh;
+    transition:.3s;
+}
+
+body.dark{
+    --bg:#151515;
+    --card:#202020;
+    --text:#f5f5f5;
+    --muted:#bbb;
+    --accent:#fff;
+    --border:#444;
+}
+
+/* LOADER */
+
+#loader{
+    position:fixed;
+    inset:0;
+    background:#111;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    font-size:22px;
+    transition:.5s;
+}
+
+#loader.hide{
+    opacity:0;
+    visibility:hidden;
+}
+
+/* HEADER */
+
+header{
+    padding:25px 15px;
+    text-align:center;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+}
+
+body.dark header{
+    background:rgba(20,20,20,.9);
+}
+
+.logo{
+    width:95px;
+    height:95px;
+    object-fit:contain;
+    border-radius:50%;
+    margin-bottom:10px;
+}
+
+header h1{
+    font-size:clamp(28px,6vw,48px);
+    letter-spacing:2px;
+}
+
+header p{
+    margin-top:8px;
+    color:var(--muted);
+}
+
+/* CONTROLS */
+
+.controls{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:15px;
+}
+
+.control-btn{
+    border:none;
+    padding:11px 16px;
+    border-radius:25px;
+    background:var(--accent);
+    color:var(--bg);
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.control-btn:hover{
+    transform:translateY(-2px);
+}
+
+/* HERO */
+
+.hero{
+    max-width:1000px;
+    margin:25px auto;
+    padding:25px;
+    text-align:center;
+}
+
+.hero h2{
+    font-size:clamp(25px,5vw,40px);
+    margin-bottom:10px;
+}
+
+.hero p{
+    color:var(--muted);
+    line-height:1.7;
+}
+
+/* PROGRESS */
+
+.progress-box{
+    max-width:900px;
+    margin:10px auto 30px;
+    padding:20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:20px;
+    text-align:center;
+}
+
+.progress-bar{
+    width:100%;
+    height:15px;
+    background:#ddd;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:12px;
+}
+
+.progress-fill{
+    width:0%;
+    height:100%;
+    background:var(--success);
+    transition:.4s;
+}
+
+/* DAYS */
+
+.container{
+    width:min(1100px,94%);
+    margin:auto;
+}
+
+.days-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+    gap:18px;
+}
+
+.day-card{
+    position:relative;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px;
+    cursor:pointer;
+    transition:.25s;
+    overflow:hidden;
+}
+
+.day-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+}
+
+.day-number{
+    display:inline-block;
+    background:var(--accent);
+    color:var(--bg);
+    padding:6px 11px;
+    border-radius:20px;
+    font-size:13px;
+    margin-bottom:12px;
+}
+
+.day-card h3{
+    margin-bottom:8px;
+}
+
+.day-card p{
+    color:var(--muted);
+    line-height:1.5;
+    font-size:14px;
+}
+
+.completed{
+    border:2px solid var(--success);
+}
+
+.completed::after{
+    content:"✓ COMPLETED";
+    position:absolute;
+    top:12px;
+    right:-32px;
+    transform:rotate(35deg);
+    background:var(--success);
+    color:white;
+    padding:5px 35px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+/* DETAIL */
+
+#practice{
+    display:none;
+    margin:35px auto;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:22px;
+    padding:25px;
+    max-width:900px;
+}
+
+#practice.show{
+    display:block;
+}
+
+.practice-title{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.practice-title h2{
+    font-size:30px;
+}
+
+.practice-title p{
+    color:var(--muted);
+    margin-top:7px;
+}
+
+.practice-section{
+    margin:18px 0;
+    padding:18px;
+    border-radius:15px;
+    background:rgba(128,128,128,.08);
+}
+
+.practice-section h3{
+    margin-bottom:10px;
+}
+
+.practice-section ul{
+    padding-left:22px;
+}
+
+.practice-section li{
+    margin:8px 0;
+    line-height:1.5;
+}
+
+.tip{
+    border-left:5px solid var(--accent);
+    padding:12px 15px;
+    margin-top:15px;
+    line-height:1.6;
+}
+
+.practice-buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:20px;
+}
+
+.main-btn{
+    border:none;
+    padding:13px 20px;
+    border-radius:25px;
+    cursor:pointer;
+    background:var(--accent);
+    color:var(--bg);
+    font-weight:bold;
+}
+
+.close-btn{
+    background:#777;
+    color:white;
+}
+
+/* SOCIAL */
+
+.social{
+    text-align:center;
+    margin:45px auto;
+    max-width:900px;
+}
+
+.social h2{
+    margin-bottom:15px;
+}
+
+.social-links{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.social-links a{
+    text-decoration:none;
+    padding:12px 18px;
+    border-radius:25px;
+    background:var(--accent);
+    color:var(--bg);
+    font-weight:bold;
+    transition:.2s;
+}
+
+.social-links a:hover{
+    transform:translateY(-3px);
+}
+
+/* FOOTER */
+
+footer{
+    text-align:center;
+    padding:30px 15px;
+    margin-top:40px;
+    border-top:1px solid var(--border);
+    color:var(--muted);
+}
+
+footer strong{
+    color:var(--text);
+}
+
+/* MOBILE */
+
+@media(max-width:600px){
+
+    header{
+        padding:20px 10px;
+    }
+
+    .logo{
+        width:80px;
+        height:80px;
+    }
+
+    .hero{
+        padding:15px;
+    }
+
+    #practice{
+        padding:18px;
+    }
+
+    .days-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="loader">
+    ✏️ DRAW WITH AKASH
+</div>
+
+<header>
+
+    <img src="logo.png" alt="DWA Logo" class="logo">
+
+    <h1>DRAW WITH AKASH</h1>
+
+    <p>30 Days Drawing Practice Challenge</p>
+
+    <div class="controls">
+
+        <button class="control-btn" onclick="toggleDark()">
+            🌙 Dark / ☀️ Light
+        </button>
+
+        <button class="control-btn" onclick="toggleLanguage()">
+            🌐 हिंदी / English
+        </button>
+
+    </div>
+
+</header>
+
+
+<section class="hero">
+
+    <h2 id="heroTitle">
+        Learn Drawing in 30 Days ✏️
+    </h2>
+
+    <p id="heroText">
+        रोज थोड़ा practice करो, अपनी drawing skills को improve करो
+        और Day 30 तक अपनी खुद की drawing बनाओ।
+    </p>
+
+</section>
+
+
+<div class="progress-box">
+
+    <h3>
+        Your Progress:
+        <span id="progressText">0 / 30</span>
+    </h3>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="days-grid" id="daysGrid"></div>
+
+</div>
+
+
+<section id="practice">
+
+    <div class="practice-title">
+
+        <h2 id="practiceTitle"></h2>
+
+        <p id="practiceSubtitle"></p>
+
+    </div>
+
+    <div id="practiceContent"></div>
+
+    <div class="practice-buttons">
+
+        <button class="main-btn" id="completeBtn" onclick="completeCurrentDay()">
+            ✓ Mark as Completed
+        </button>
+
+        <button class="main-btn close-btn" onclick="closePractice()">
+            ✕ Close
+        </button>
+
+    </div>
+
+</section>
+
+
+<section class="social">
+
+    <h2>Follow DRAW WITH AKASH ❤️</h2>
+
+    <div class="social-links">
+
+        <a href="https://www.instagram.com/draw_with_akash_?stkn=MWNnZjVyYWN0YTE2aA"
+           target="_blank">
+            📷 Instagram
+        </a>
+
+        <a href="https://youtube.com/@drawwithakashofficial?si=kgIGZyjBZy-vigPW"
+           target="_blank">
+            ▶️ YouTube
+        </a>
+
+        <a href="https://t.me/draw_with_akash"
+           target="_blank">
+            ✈️ Telegram
+        </a>
+
+    </div>
+
+</section>
+
+
+<footer>
+
+    <p>
+        © 2026 <strong>DRAW WITH AKASH</strong>
+    </p>
+
+    <p>
+        Practice • Learn • Create ✏️
+    </p>
+
+</footer>
+
+
+<script>
+
+/* =========================
+   30 DAYS DATA
+========================= */
+
+const days = [
+
+{
+day:1,
+title:"Basic Lines, Circles & Shapes",
+desc:"Straight lines, curves, circles, squares and triangles.",
+steps:[
+"10 straight lines banao.",
+"10 curved lines banao.",
+"10 wave lines banao.",
+"10 zigzag lines banao.",
+"Ruler ke bina 5 circles banao.",
+"Alag-alag size ke basic shapes practice karo."
+],
+challenge:"Ek poora page different types ki lines aur shapes se fill karo.",
+tip:"Pencil ko bahut tight mat pakdo. Hand ko relaxed rakho."
+},
+
+{
+day:2,
+title:"Circles & Ellipses",
+desc:"Circle aur ellipse ko smooth banana seekho.",
+steps:[
+"10 small circles banao.",
+"10 large circles banao.",
+"5 horizontal ellipses banao.",
+"5 vertical ellipses banao.",
+"Same size ke 5 circles continuously banane ki practice karo."
+],
+challenge:"5 almost same-size circles bina ruler ke banao.",
+tip:"Circle banate waqt wrist ke saath arm movement bhi use karo."
+},
+
+{
+day:3,
+title:"Basic Shapes",
+desc:"Square, rectangle, triangle, oval aur star.",
+steps:[
+"10 squares banao.",
+"10 rectangles banao.",
+"10 triangles banao.",
+"10 ovals banao.",
+"5 stars banao.",
+"Different shapes ko combine karke objects banao."
+],
+challenge:"Sirf basic shapes use karke ek chhota object banao.",
+tip:"Shape ki outline ko pehle light pencil se banao."
+},
+
+{
+day:4,
+title:"Shapes Into Simple Objects",
+desc:"Basic shapes ko real objects mein convert karo.",
+steps:[
+"Circle → Ball ya Apple.",
+"Rectangle → Book.",
+"Triangle → Mountain ya Roof.",
+"Cylinder → Glass.",
+"Square + Rectangle → House.",
+"Har object ki outline ke baad simple details add karo."
+],
+challenge:"Sirf basic shapes se 3 different objects banao.",
+tip:"Pehle object ko simple shapes mein break karo."
+},
+
+{
+day:5,
+title:"Light & Dark Pencil Pressure",
+desc:"Pencil pressure control karna seekho.",
+steps:[
+"Light pressure se strokes banao.",
+"Medium pressure se strokes banao.",
+"Dark pressure se strokes banao.",
+"Ek box ko light se dark tak shade karo.",
+"Smooth transition banane ki practice karo."
+],
+challenge:"Ek complete page light-to-dark shading practice se fill karo.",
+tip:"Dark shade ke liye sirf pressure badhao; pencil ko bahut aggressively mat rub karo."
+},
+
+{
+day:6,
+title:"Hatching Practice",
+desc:"Lines se shading banana seekho.",
+steps:[
+"Parallel hatching practice karo.",
+"Reverse-direction hatching karo.",
+"Cross-hatching practice karo.",
+"Different spacing wali lines banao.",
+"Ek small sphere ko hatching se shade karo."
+],
+challenge:"Hatching use karke ek 3D object ko shade karo.",
+tip:"Lines ki direction object ke form ko follow kar sakti hai."
+},
+
+{
+day:7,
+title:"Basic Shading",
+desc:"White se black tak smooth shading.",
+steps:[
+"7-step shading scale banao.",
+"Sabse light area ko almost white rakho.",
+"Gradually medium tone add karo.",
+"Last box ko darkest shade karo.",
+"Ek sphere banao.",
+"Sphere mein light side aur shadow side identify karo."
+],
+challenge:"Light source ek side se rakhkar shaded sphere banao.",
+tip:"Shadow ko ekdum black na karo; gradually build karo."
+},
+
+{
+day:8,
+title:"3D Forms",
+desc:"Sphere, cube, cylinder aur cone.",
+steps:[
+"Ek sphere banao.",
+"Ek cube banao.",
+"Ek cylinder banao.",
+"Ek cone banao.",
+"Har shape mein light, mid-tone aur shadow add karo.",
+"Object ke neeche cast shadow add karo."
+],
+challenge:"4 basic 3D shapes ko ek page par draw aur shade karo.",
+tip:"Har object ke liye ek consistent light direction rakho."
+},
+
+{
+day:9,
+title:"Simple Fruits",
+desc:"Simple fruits ko basic shapes se draw karo.",
+steps:[
+"Apple banao.",
+"Orange banao.",
+"Banana banao.",
+"Apni choice ka ek fruit banao.",
+"Basic shape se outline develop karo.",
+"Details aur shading add karo."
+],
+challenge:"Ek fruit ko dekhkar draw karo, phir bina dekhe dobara draw karo.",
+tip:"Fruit ki overall shape ko details se pehle correct karo."
+},
+
+{
+day:10,
+title:"Leaves & Plants",
+desc:"Leaves, veins, stems aur simple plants.",
+steps:[
+"5 simple leaves banao.",
+"5 different leaf shapes banao.",
+"Leaf veins draw karo.",
+"Ek stem banao.",
+"Ek small plant draw karo.",
+"Light aur shadow add karo."
+],
+challenge:"Ek complete small plant with shading banao.",
+tip:"Leaf veins ko natural curves mein rakho."
+},
+
+{
+day:11,
+title:"Everyday Objects",
+desc:"Daily-use objects ko simple forms mein draw karo.",
+steps:[
+"Ek cup banao.",
+"Ek bottle banao.",
+"Ek pencil banao.",
+"Ek notebook banao.",
+"Ek spoon banao.",
+"Har object ko basic shapes mein divide karo."
+],
+challenge:"Table par rakhi 3 simple objects ki drawing banao.",
+tip:"Object ki proportion aur overall shape pehle observe karo."
+},
+
+{
+day:12,
+title:"Texture Practice",
+desc:"Different surfaces aur textures draw karo.",
+steps:[
+"Wood texture practice karo.",
+"Cloth texture practice karo.",
+"Rough surface ke marks banao.",
+"Smooth surface ko light shading se show karo.",
+"Small dots aur short lines se texture banao.",
+"Different textures ko ek page par combine karo."
+],
+challenge:"Ek object draw karke uske andar kam se kam 3 textures show karo.",
+tip:"Texture ko over-detail karne se pehle basic form complete karo."
+},
+
+{
+day:13,
+title:"Simple Flower",
+desc:"Flower ko simple shapes se draw karna.",
+steps:[
+"Flower ka center banao.",
+"5-petal flower banao.",
+"Different petal shapes try karo.",
+"Stem aur leaves add karo.",
+"Petals mein light shading karo.",
+"Complete flower ko shade karo."
+],
+challenge:"Apni imagination se ek unique flower design karo.",
+tip:"Petals ko ek hi exact shape mein rakhna zaroori nahi."
+},
+
+{
+day:14,
+title:"Bird Basics",
+desc:"Simple bird shapes aur body proportions.",
+steps:[
+"Bird ka oval body banao.",
+"Head ke liye circle add karo.",
+"Beak draw karo.",
+"Simple wings banao.",
+"Legs aur tail add karo.",
+"Light shading se form dikhao."
+],
+challenge:"Ek simple sitting bird draw karo.",
+tip:"Bird ko pehle circles aur ovals se construct karo."
+},
+
+{
+day:15,
+title:"Fish & Small Animals",
+desc:"Simple animals ko basic shapes se draw karo.",
+steps:[
+"Ek simple fish banao.",
+"Ek small rabbit banao.",
+"Ek simple cat face banao.",
+"Body ko circles aur ovals se construct karo.",
+"Eyes aur basic details add karo.",
+"Light shading karo."
+],
+challenge:"Basic shapes use karke 3 small animals draw karo.",
+tip:"Details se pehle body proportions par focus karo."
+},
+
+{
+day:16,
+title:"Eye Basics",
+desc:"Eye ki basic structure aur shading.",
+steps:[
+"Eye ka simple almond outline banao.",
+"Iris aur pupil add karo.",
+"Upper eyelid line banao.",
+"Lower eyelid ko light rakho.",
+"Iris mein light aur dark areas add karo.",
+"Eyebrow add karo."
+],
+challenge:"2 eyes draw karo aur unki placement balanced rakho.",
+tip:"Eye ko sirf ek symbol ki tarah nahi, ek 3D form ki tarah observe karo."
+},
+
+{
+day:17,
+title:"Nose Basics",
+desc:"Simple nose structure aur shadow.",
+steps:[
+"Simple nose front-view outline banao.",
+"Nose bridge indicate karo.",
+"Nostrils ko subtle rakho.",
+"Tip par light shadow add karo.",
+"Side shadow add karo.",
+"Hard outlines ko avoid karke shading se form show karo."
+],
+challenge:"Front view aur simple side view nose banao.",
+tip:"Nose ke shape ko shading se define karna useful hota hai."
+},
+
+{
+day:18,
+title:"Lips Basics",
+desc:"Basic lip structure aur soft shading.",
+steps:[
+"Center line banao.",
+"Upper lip ka simple shape banao.",
+"Lower lip ka shape add karo.",
+"Corner areas indicate karo.",
+"Lower lip mein soft shadow add karo.",
+"Outline ko excessively dark na karo."
+],
+challenge:"Front-view simple lips sketch banao.",
+tip:"Lips ko simple geometric shapes mein pehle construct karo."
+},
+
+{
+day:19,
+title:"Ear Basics",
+desc:"Ear structure ko simple lines aur shadows se samjho.",
+steps:[
+"Outer ear shape banao.",
+"Inner curves add karo.",
+"Main folds identify karo.",
+"Light shading add karo.",
+"Deep folds ko slightly darker rakho.",
+"Complete ear ko simple tones mein finish karo."
+],
+challenge:"2 ears different angles se draw karo.",
+tip:"Ear ki outer silhouette ko pehle observe karo."
+},
+
+{
+day:20,
+title:"Face Proportions",
+desc:"Face ko basic guidelines se construct karo.",
+steps:[
+"Ek light vertical center line banao.",
+"Eye guideline add karo.",
+"Nose guideline add karo.",
+"Mouth guideline add karo.",
+"Chin aur jaw shape add karo.",
+"Guidelines ko erase/lighten karke features complete karo."
+],
+challenge:"Front-view face ka simple proportion sketch banao.",
+tip:"Guidelines ko bahut dark mat karo."
+},
+
+{
+day:21,
+title:"Half-Face Sketch",
+desc:"Face ke ek half section ki detailed practice.",
+steps:[
+"Face outline ka half portion banao.",
+"Eye place karo.",
+"Nose structure add karo.",
+"Lips add karo.",
+"Cheek aur jaw mein soft shading karo.",
+"Hairline ka basic indication do."
+],
+challenge:"Half-face sketch ko light aur shadow ke saath complete karo.",
+tip:"Features ko ek-ek karke place karo; sabko ek saath dark mat karo."
+},
+
+{
+day:22,
+title:"Full Face — Front View",
+desc:"Complete front-view face drawing.",
+steps:[
+"Head shape banao.",
+"Face center line aur eye guideline add karo.",
+"Eyes draw karo.",
+"Nose add karo.",
+"Lips add karo.",
+"Hair shape add karo.",
+"Face aur hair mein basic shading karo."
+],
+challenge:"Ek complete front-view pencil face banao.",
+tip:"Pehle proportion, phir features, phir details."
+},
+
+{
+day:23,
+title:"3/4 Face Basics",
+desc:"3/4 angle face ko understand karo.",
+steps:[
+"Head ko slightly turned oval se construct karo.",
+"Center line ko curved direction mein place karo.",
+"Eyes ki placement adjust karo.",
+"Nose ko angle ke according draw karo.",
+"Lips ko perspective ke according place karo.",
+"Jaw aur cheek shading add karo."
+],
+challenge:"Ek simple 3/4 face sketch banao.",
+tip:"3/4 view mein dono sides equal width ki nahi hoti."
+},
+
+{
+day:24,
+title:"Side Profile",
+desc:"Simple side-profile face drawing.",
+steps:[
+"Head ka round shape banao.",
+"Forehead line add karo.",
+"Nose projection banao.",
+"Lips ka simple projection add karo.",
+"Chin aur jaw complete karo.",
+"Neck aur hairline add karo."
+],
+challenge:"Ek complete side-profile pencil sketch banao.",
+tip:"Profile mein forehead, nose, lips aur chin ki silhouette observe karo."
+},
+
+{
+day:25,
+title:"Portrait Light & Shadow",
+desc:"Portrait mein light source aur shadows.",
+steps:[
+"Simple portrait outline banao.",
+"Ek clear light direction choose karo.",
+"Light side ko relatively bright rakho.",
+"Shadow side mein soft tone add karo.",
+"Nose, cheek aur chin ke shadows observe karo.",
+"Background ko simple rakho."
+],
+challenge:"Ek portrait ko single light source ke saath shade karo.",
+tip:"Har shadow ko dark karne se pehle overall value balance check karo."
+},
+
+{
+day:26,
+title:"Portrait Hair & Texture",
+desc:"Hair ko groups aur strands mein draw karo.",
+steps:[
+"Hair ka overall shape banao.",
+"Large hair groups identify karo.",
+"Dark root areas indicate karo.",
+"Flow direction ke according strands add karo.",
+"Highlights ke liye kuch areas light rakho.",
+"Hair ko face ke saath integrate karo."
+],
+challenge:"Ek simple portrait mein complete hairstyle add karo.",
+tip:"Har individual hair strand draw karne ke bajay pehle large shapes banao."
+},
+
+{
+day:27,
+title:"Expression Practice",
+desc:"Simple facial expressions practice karo.",
+steps:[
+"Neutral expression banao.",
+"Happy expression banao.",
+"Sad expression banao.",
+"Surprised expression banao.",
+"Angry-looking expression ko simple lines se practice karo.",
+"Eyebrows, eyes aur mouth ke changes observe karo."
+],
+challenge:"Ek hi face ko 3 different expressions mein draw karo.",
+tip:"Expression mein eyebrows, eyes aur mouth ki position important hoti hai."
+},
+
+{
+day:28,
+title:"Clothing & Accessories",
+desc:"Portrait ke saath simple clothing aur accessories.",
+steps:[
+"Simple T-shirt neckline draw karo.",
+"Collar practice karo.",
+"Hairband ya cap add karo.",
+"Simple glasses draw karo.",
+"Clothing folds ki basic lines practice karo.",
+"Portrait ke saath accessories combine karo."
+],
+challenge:"Ek portrait ko simple outfit aur ek accessory ke saath complete karo.",
+tip:"Clothing folds ko body ke form ke according curve karo."
+},
+
+{
+day:29,
+title:"Complete Pencil Portrait",
+desc:"Ab tak seekhi skills ko combine karo.",
+steps:[
+"Reference ya imagination se subject choose karo.",
+"Light construction lines se head shape banao.",
+"Face proportions set karo.",
+"Eyes, nose, lips aur ears add karo.",
+"Hair aur clothing add karo.",
+"Light aur shadow develop karo.",
+"Final details complete karo."
+],
+challenge:"Ek complete pencil portrait ko beginning se end tak finish karo.",
+tip:"Drawing ko stages mein complete karo: construction → proportions → details → shading."
+},
+
+{
+day:30,
+title:"Final Challenge — Your Own Drawing",
+desc:"30-day challenge ka final drawing project.",
+steps:[
+"Apna favourite subject choose karo.",
+"Reference use kar sakte ho ya imagination se draw kar sakte ho.",
+"Light construction sketch banao.",
+"Correct proportions check karo.",
+"Details add karo.",
+"Shading aur texture add karo.",
+"Final drawing ko clean finish do."
+],
+challenge:"Apni 30-day journey ki FINAL DRAWING banao aur apni progress compare karo.",
+tip:"Perfect drawing se zyada important hai ki tumne 30 days consistently practice ki."
+}
+
+];
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+let hindi = true;
+
+
+/* =========================
+   PROGRESS
+========================= */
+
+let completed =
+JSON.parse(localStorage.getItem("dwaCompleted")) || [];
+
+
+/* =========================
+   CURRENT DAY
+========================= */
+
+let currentDay = null;
+
+
+/* =========================
+   CREATE DAY CARDS
+========================= */
+
+function createDays(){
+
+    const grid =
+    document.getElementById("daysGrid");
+
+    grid.innerHTML = "";
+
+    days.forEach(item => {
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "day-card";
+
+        if(completed.includes(item.day)){
+            card.classList.add("completed");
+        }
+
+        card.innerHTML = `
+
+            <span class="day-number">
+                DAY ${item.day}
+            </span>
+
+            <h3>
+                ${item.title}
+            </h3>
+
+            <p>
+                ${item.desc}
+            </p>
+
+        `;
+
+        card.onclick =
+        () => openPractice(item.day);
+
+        grid.appendChild(card);
+
+    });
+
+    updateProgress();
+}
+
+
+/* =========================
+   OPEN PRACTICE
+========================= */
+
+function openPractice(dayNumber){
+
+    const item =
+    days.find(d => d.day === dayNumber);
+
+    if(!item) return;
+
+    currentDay = dayNumber;
+
+    document.getElementById("practiceTitle")
+    .textContent =
+    `Day ${item.day}: ${item.title}`;
+
+    document.getElementById("practiceSubtitle")
+    .textContent =
+    item.desc;
+
+    let html = "";
+
+    html += `
+        <div class="practice-section">
+
+            <h3>✏️ Practice Steps</h3>
+
+            <ul>
+    `;
+
+    item.steps.forEach(step => {
+
+        html += `<li>${step}</li>`;
+
+    });
+
+    html += `
+            </ul>
+
+        </div>
+    `;
+
+
+    html += `
+        <div class="practice-section">
+
+            <h3>🔥 Today's Challenge</h3>
+
+            <p>
+                ${item.challenge}
+            </p>
+
+        </div>
+    `;
+
+
+    html += `
+        <div class="tip">
+
+            💡 <strong>Drawing Tip:</strong><br>
+
+            ${item.tip}
+
+        </div>
+    `;
+
+
+    document.getElementById("practiceContent")
+    .innerHTML = html;
+
+
+    const btn =
+    document.getElementById("completeBtn");
+
+
+    if(completed.includes(dayNumber)){
+
+        btn.textContent =
+        "✓ Completed";
+
+    }else{
+
+        btn.textContent =
+        "✓ Mark as Completed";
+
+    }
+
+
+    const section =
+    document.getElementById("practice");
+
+    section.classList.add("show");
+
+    section.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+    });
+
+}
+
+
+/* =========================
+   CLOSE PRACTICE
+========================= */
+
+function closePractice(){
+
+    document
+    .getElementById("practice")
+    .classList.remove("show");
+
+}
+
+
+/* =========================
+   COMPLETE DAY
+========================= */
+
+function completeCurrentDay(){
+
+    if(!currentDay) return;
+
+    if(!completed.includes(currentDay)){
+
+        completed.push(currentDay);
+
+        localStorage.setItem(
+            "dwaCompleted",
+            JSON.stringify(completed)
+        );
+
+    }
+
+    createDays();
+
+    document.getElementById("completeBtn")
+    .textContent =
+    "✓ Completed";
+
+}
+
+
+/* =========================
+   UPDATE PROGRESS
+========================= */
+
+function updateProgress(){
+
+    const count =
+    completed.length;
+
+    const percentage =
+    (count / days.length) * 100;
+
+    document.getElementById("progressText")
+    .textContent =
+    `${count} / ${days.length}`;
+
+    document.getElementById("progressFill")
+    .style.width =
+    percentage + "%";
+
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+function toggleDark(){
+
+    document.body.classList.toggle("dark");
+
+    localStorage.setItem(
+        "dwaDark",
+        document.body.classList.contains("dark")
+    );
+
+}
+
+
+/* Restore dark mode */
+
+if(
+    localStorage.getItem("dwaDark") === "true"
+){
+
+    document.body.classList.add("dark");
+
+}
+
+
+/* =========================
+   LANGUAGE
+========================= */
+
+function toggleLanguage(){
+
+    hindi = !hindi;
+
+    if(hindi){
+
+        document.getElementById("heroTitle")
+        .textContent =
+        "Learn Drawing in 30 Days ✏️";
+
+        document.getElementById("heroText")
+        .textContent =
+        "रोज थोड़ा practice करो, अपनी drawing skills को improve करो और Day 30 तक अपनी खुद की drawing बनाओ।";
+
+    }else{
+
+        document.getElementById("heroTitle")
+        .textContent =
+        "Learn Drawing in 30 Days ✏️";
+
+        document.getElementById("heroText")
+        .textContent =
+        "Practice a little every day, improve your drawing skills and create your own drawing by Day 30.";
+
+    }
+
+}
+
+
+/* =========================
+   LOADER
+========================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        setTimeout(() => {
+
+            document
+            .getElementById("loader")
+            .classList.add("hide");
+
+        },700);
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+createDays();
+
+</script>
+
+</body>
+</html>

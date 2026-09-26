@@ -1,0 +1,1 @@
+src="images/day${item.day}.png"
